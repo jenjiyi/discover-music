@@ -34,32 +34,60 @@ var showError = function(error){
 	var errorText = '<p>' + error + '</p>';
 	errorElem.append(errorText);
 };
+// this function takes the question object returned by StackOverflow 
+// and creates new result to be appended to DOM
+var showArtist = function(simArtist) {
+	
+	// clone our result template code
+	var result = $('.templates .result').clone();
+	
+	// Set the question properties in result
+	var nameElem = result.find('h2 a');
+	nameElem.attr('href', simArtist.results.uri);
+	nameElem.text(question.title);
 
+
+	// set the #views for question property in result
+	var viewed = result.find('.viewed');
+	viewed.text(question.view_count);
+
+	// set some properties related to asker
+	var asker = result.find('.asker');
+	asker.html('<p>Name: <a target="_blank" href=http://stackoverflow.com/users/' + question.owner.user_id + ' >' +
+													question.owner.display_name +
+												'</a>' +
+							'</p>' +
+ 							'<p>Reputation: ' + question.owner.reputation + '</p>'
+	);
+
+	return result;
+};
 
 // takes a string of an artist to be searched
 // for on Tastekid
 var getSimilar = function(artist) {
 	// the parameters we need to pass in our request to Tastekids's API
-	var request = {
-		k: "148673-Discover-OA4KJP1O",
-		info: 1,
-		callback: "jsonp"
-				};
+	//var request = {
+		//k: "148673-Discover-OA4KJP1O",
+		//info: 1,
+		//type: "music",
+		//callback: "jsonp"};
 	var result = $.ajax({
-		url: "http://www.tastekid.com/api/similar?q=music:" + artist,
-		data: request,
+		url: "https://www.tastekid.com/api/similar?q=music:" + artist,
+		//data: request,
 		datatype: "jsonp",
 		type: "GET",
 		})
-	.done(function(request){
-		console.log("ran api");
+	.done(function(result){
+		console.log("done api");
 
-		//$.each(result.items, function(i, item) {
-		//	var question = showQuestion(item);
-		//	$('.results').append(question);
+		$.each(result.results, function(i, results) {
+			var simArtist = showArtist(results);
+			$('.results').append(simArtist);
 		})
 	.fail(function(jqXHR, error, errorThrown){
 		var errorElem = showError(error);
-		$('.results').append(errorElem);
+		$('.results .container').append(errorElem);
+	});
 	});
 };
