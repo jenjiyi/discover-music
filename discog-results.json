@@ -1,0 +1,20 @@
+pagination: {
+per_page: 50,
+items: 5372,
+page: 1,
+urls: {
+last: "https://api.discogs.com/database/search?q=Morrissey&per_page=50&secret=IgnpUVAmXGwXKePEVmgofIHItlgzqika&page=108&key=PYsVsPzgdtpWJRHhoWdZ",
+next: "https://api.discogs.com/database/search?q=Morrissey&per_page=50&secret=IgnpUVAmXGwXKePEVmgofIHItlgzqika&page=2&key=PYsVsPzgdtpWJRHhoWdZ"
+},
+pages: 108
+},
+results: [
+{
+thumb: "https://api-img.discogs.com/l9hRJA9Ucv6pPxrb9Gyrm-c2hzk=/150x150/smart/filters:strip_icc():format(jpeg):mode_rgb()/discogs-images/A-92577-1319357313.jpeg.jpg",
+title: "Morrissey",
+uri: "/artist/92577-Morrissey",
+resource_url: "https://api.discogs.com/artists/92577",
+type: "artist",
+id: 92577
+},
+]
