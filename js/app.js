@@ -77,12 +77,7 @@ var showArtist = function(artistEntry){
 	//.read-more - tastekid similar.results.wUrl
 	var readMore = result.find('.read-more');
 	readMore.attr('href', artistEntry.wUrl);
-	//.thumbnail from discogs
-//	var thumbnail = result.find('.thumbnail');
-//	thumbnail.attr('src', discogs>results.thumb);
-	//.artist-link from discogs
-//	var discogsLink = result.find('.discogs-link');
-//	discogsLink.attr('href', "http://www.discogs.com/artist/236149-Ian-Curtis" + discogs>results.uri)
+	
 	
 
 	return result;
@@ -103,7 +98,13 @@ var showArtist = function(artistEntry){
 		function getCatalog(data){
 			console.log("callback worked: "+ data);
 			var discogs = data.results[0];
-			console.log(discogs);	
+			console.log(discogs);
+			//.thumbnail from discogs
+			var thumbnail = result.find('.thumbnail');
+			thumbnail.attr('src', results.thumb);
+			//.artist-link from discogs
+			var discogsLink = result.find('.discogs-link');
+			discogsLink.attr('href', "http://www.discogs.com/artist/" + results.uri);
 			}; 
 	};
 	
