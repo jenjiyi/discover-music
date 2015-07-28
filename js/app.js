@@ -43,7 +43,7 @@ var getSimilar = function(artist) {
 		$.each(resultCount, function(i, item) {
 			console.log('each ran');
 			var artistEntry = showArtist(item);
-			$('.row .search-results').append(artistEntry);
+			$('.search-results').append(artistEntry);
 		});
 	};
 	//error
@@ -58,27 +58,53 @@ var showError = function(error){
 	var errorText = '<p>' + error + '</p>';
 	errorElem.append(errorText);
 };
-var showArtist = function(artistEntry){
-	console.log("function called show artist");
-// clone our result template code
-	var result = $('.template .col-md-3').clone();
 
+// takes each artist string and turns it into displayable DOM element
+var showArtist = function(artistEntry){
+	var artistName = artistEntry.Name;
+	console.log("show artist: " + artistName);
+	getDiscogs(artistName);
+	
+
+// clone our result template code
+	var result = $('.templates .col-md-3').clone();	
 	//h2 - tastekid similar.results.Name
 	var artistTitle = result.find('h2');
 	artistTitle.append(artistEntry.Name);
 	//.description - tastekid similar.results.wTeaser
-	var description = result.find('p.description');
-	description.text(artistEntry.wTeaser);
+	var description = result.find('.description');
+	description.prepend((artistEntry.wTeaser).slice(0,150));
 	//.read-more - tastekid similar.results.wUrl
 	var readMore = result.find('.read-more');
 	readMore.attr('href', artistEntry.wUrl);
-	//.thumbnail -from discogs
+	//.thumbnail from discogs
 //	var thumbnail = result.find('.thumbnail');
 //	thumbnail.attr('src', discogs>results.thumb);
-	//.artist-link -- from discogs
+	//.artist-link from discogs
 //	var discogsLink = result.find('.discogs-link');
-//	discogsLink.attr('href', discogs>results.uri)
+//	discogsLink.attr('href', "http://www.discogs.com/artist/236149-Ian-Curtis" + discogs>results.uri)
 	
 
 	return result;
 };
+
+//get discogs pass results.name to get thumbnail and discogs artist url
+	var getDiscogs = function(artistName) {
+		console.log("getDiscogs function ran");
+		// the parameters we need to pass in our request to Tastekids's API
+		var parameters = {
+		key: "PYsVsPzgdtpWJRHhoWdZ",
+		secret: "IgnpUVAmXGwXKePEVmgofIHItlgzqika",
+		callback: "getCatalog"
+				};
+			//ex: https://api.discogs.com/database/search?q=Ian Curtis&key=PYsVsPzgdtpWJRHhoWdZ&secret=IgnpUVAmXGwXKePEVmgofIHItlgzqika 
+		var discogResult = $.getJSON("https://api.discogs.com/database/search?q=" + artistName + "&key=PYsVsPzgdtpWJRHhoWdZ&secret=IgnpUVAmXGwXKePEVmgofIHItlgzqika", getCatalog);
+		//callback
+		function getCatalog(data){
+			console.log("callback worked: "+ data);
+			var discogs = data.results[0];
+			console.log(discogs);	
+			}; 
+	};
+	
+		//results.thumb, results.uri
