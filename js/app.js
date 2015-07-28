@@ -19,21 +19,10 @@ $(document).ready( function() {
 		//user first result in array 
 		//results.thumb, results.uri
 
-//template classes
-//h2 - tastekid similar.results.Name
-//.description - tastekid similar.results.wTeaser
-//.read-more - tastekid similar.results.wUrl
-//.thumbnail -from discogs
-//.artist-link -- from discogs
 
 
 
-// takes error string and turns it into displayable DOM element
-var showError = function(error){
-	var errorElem = $('.templates .error').clone();
-	var errorText = '<p>' + error + '</p>';
-	errorElem.append(errorText);
-};
+
 
 
 // takes a string of an artist to be searched
@@ -41,25 +30,59 @@ var showError = function(error){
 var getSimilar = function(artist) {
 	// the parameters we need to pass in our request to Tastekids's API
 	var request = {
-		k: "148673-Discover-OA4KJP1O",
+		//k: "148673-Discover-OA4KJP1O",
 		info: 1,
-		callback: "jsonp",
+		callback: "getArtists"
 				};
-	var result = $.ajax({
-		url: "http://www.tastekid.com/api/similar?q=music:" + artist,
-		data: request,
-		datatype: "jsonp",
-		type: "GET",
-		})
-	.done(function(request){
-		console.log("ran api");
-
-		//$.each(result.items, function(i, item) {
-		//	var question = showQuestion(item);
-		//	$('.results').append(question);
-		})
-	.fail(function(jqXHR, error, errorThrown){
+	var result = $.getJSON("http://www.tastekid.com/api/similar?q=music:" + artist + "&info=1&callback=?", getArtists);
+	//callback
+	function getArtists(data){
+		console.log(data);
+		var resultCount = data.Similar.Results.length;
+		console.log(resultCount);
+		$.each(resultCount, function(i, item) {
+			console.log('each ran');
+			var artistEntry = showArtist(item);
+			$('.row .search-results').append(artistEntry);
+		});
+	};
+	//error
+	/*.fail(function(jqXHR, error, errorThrown){
 		var errorElem = showError(error);
-		$('.results').append(errorElem);
-	});
+		$('.search-results').append(errorElem);
+	});*/
+};
+// takes error string and turns it into displayable DOM element
+var showError = function(error){
+	var errorElem = $('.templates .error').clone();
+	var errorText = '<p>' + error + '</p>';
+	errorElem.append(errorText);
+};
+var showArtist = function(artistEntry){
+	console.log("function called show artist");
+// clone our result template code
+	var result = $('.templates .col-md-3').clone();
+
+	//h2 - tastekid similar.results.Name
+	var artistTitle = result.find('h2');
+	artistTitle.append(artistEntry.Results.Name);
+	//.description - tastekid similar.results.wTeaser
+	var description = result.find('p.description');
+	description.text(Similar.Results.wTeaser);
+	//.read-more - tastekid similar.results.wUrl
+	var readMore = result.find('.read-more');
+	readMore.attr('href', similar.results.wUrl);
+	//.thumbnail -from discogs
+	var thumbnail = result.find('.thumbnail');
+	thumbnail.attr('src', discogs>results.thumb);
+	//.artist-link -- from discogs
+	var discogsLink = result.find('.discogs-link');
+	discogsLink.attr('href', discogs>results.uri)
+	
+	// Set the question properties in result
+	var questionElem = result.find('.question-text a');
+	questionElem.attr('href', question.link);
+	questionElem.text(question.title);
+
+	return result;
 };
