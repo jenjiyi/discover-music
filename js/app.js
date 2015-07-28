@@ -38,7 +38,7 @@ var getSimilar = function(artist) {
 	//callback
 	function getArtists(data){
 		console.log(data);
-		var resultCount = data.Similar.Results.length;
+		var resultCount = data.Similar.Results;
 		console.log(resultCount);
 		$.each(resultCount, function(i, item) {
 			console.log('each ran');
@@ -61,28 +61,24 @@ var showError = function(error){
 var showArtist = function(artistEntry){
 	console.log("function called show artist");
 // clone our result template code
-	var result = $('.templates .col-md-3').clone();
+	var result = $('.template .col-md-3').clone();
 
 	//h2 - tastekid similar.results.Name
 	var artistTitle = result.find('h2');
-	artistTitle.append(artistEntry.Results.Name);
+	artistTitle.append(artistEntry.Name);
 	//.description - tastekid similar.results.wTeaser
 	var description = result.find('p.description');
-	description.text(Similar.Results.wTeaser);
+	description.text(artistEntry.wTeaser);
 	//.read-more - tastekid similar.results.wUrl
 	var readMore = result.find('.read-more');
-	readMore.attr('href', similar.results.wUrl);
+	readMore.attr('href', artistEntry.wUrl);
 	//.thumbnail -from discogs
-	var thumbnail = result.find('.thumbnail');
-	thumbnail.attr('src', discogs>results.thumb);
+//	var thumbnail = result.find('.thumbnail');
+//	thumbnail.attr('src', discogs>results.thumb);
 	//.artist-link -- from discogs
-	var discogsLink = result.find('.discogs-link');
-	discogsLink.attr('href', discogs>results.uri)
+//	var discogsLink = result.find('.discogs-link');
+//	discogsLink.attr('href', discogs>results.uri)
 	
-	// Set the question properties in result
-	var questionElem = result.find('.question-text a');
-	questionElem.attr('href', question.link);
-	questionElem.text(question.title);
 
 	return result;
 };
