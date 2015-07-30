@@ -4,7 +4,7 @@ $(document).ready( function() {
 		$('.search-results').html('');
 		// get the value of the artist the user submitted
 		var artist = $(this).find("input[name='artist-input']").val();
-			
+		getSimilar(artist);
 	});
 });
 
