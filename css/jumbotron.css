@@ -1,9 +1,6 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-<<<<<<< HEAD
-=======
   padding-top: 50px;
->>>>>>> bc15071554bdff8ef57b6b736ec6dfa31b68eca1
   padding-bottom: 20px;
 }
 .intro	{
