@@ -99,7 +99,7 @@ var arrayNames = function(artistCurrent, i){
 				//store first section of discogs results
 				var discogsData = data.results[0];
 				console.log(discogsData);
-				console.log("index number: " + i)
+				console.log("index number: " + i);
 				console.log(artistCurrent + " call back ran  1. discogs url: " + discogsData.uri + "; 2. img src: " +discogsData.thumb);	
 				//adds thumbnail image to dom
 				$('.thumbnail').eq(i).attr('src', discogsData.thumb);
