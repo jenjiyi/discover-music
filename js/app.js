@@ -2,12 +2,16 @@ $(document).ready( function() {
 	$('.artist-finder').submit( function(event){
 		// zero out results if previous search has run
 		$('.search-results').html('');
+<<<<<<< HEAD
 		
+=======
+>>>>>>> bc15071554bdff8ef57b6b736ec6dfa31b68eca1
 		// get the value of the artist the user submitted
 		var artist = $(this).find("input[name='artist-input']").val();
 		getSimilar(artist);
 	});
 });
+<<<<<<< HEAD
 //var for returned artist names in array
 var artistArray = [];
 
@@ -44,6 +48,29 @@ var getSimilar = function(artist) {
 		$('.search-results').append(errorElem);
 	});*/
 };
+=======
+
+//get top related artists from tastekid
+//https://www.tastekid.com/api/similar?q=music:morrissey&k:148673-Discover-OA4KJP1O&verbose=1
+
+//store results list
+
+//loop through results and generate html from template
+	//get discogs pass results.name to get thumbnail and discogs artist url 
+	//https://api.discogs.com/database/search?q=Ian Curtis&key=PYsVsPzgdtpWJRHhoWdZ&secret=IgnpUVAmXGwXKePEVmgofIHItlgzqika 
+		//user first result in array 
+		//results.thumb, results.uri
+
+//template classes
+//h2 - tastekid similar.results.Name
+//.description - tastekid similar.results.wTeaser
+//.read-more - tastekid similar.results.wUrl
+//.thumbnail -from discogs
+//.artist-link -- from discogs
+
+
+
+>>>>>>> bc15071554bdff8ef57b6b736ec6dfa31b68eca1
 // takes error string and turns it into displayable DOM element
 var showError = function(error){
 	var errorElem = $('.templates .error').clone();
@@ -51,6 +78,7 @@ var showError = function(error){
 	errorElem.append(errorText);
 };
 
+<<<<<<< HEAD
 // takes each artist string and turns it into displayable DOM element
 var showArtist = function(artistEntry){
 	var artistName = artistEntry.Name;
@@ -108,3 +136,33 @@ var arrayNames = function(artistCurrent, i){
 			};
 
 
+=======
+
+// takes a string of an artist to be searched
+// for on Tastekid
+var getSimilar = function(artist) {
+	// the parameters we need to pass in our request to Tastekids's API
+	var request = {
+		k: "148673-Discover-OA4KJP1O",
+		info: 1,
+		callback: "jsonp"
+				};
+	var result = $.ajax({
+		url: "http://www.tastekid.com/api/similar?q=music:" + artist,
+		data: request,
+		datatype: "jsonp",
+		type: "GET",
+		})
+	.done(function(request){
+		console.log("ran api");
+
+		//$.each(result.items, function(i, item) {
+		//	var question = showQuestion(item);
+		//	$('.results').append(question);
+		})
+	.fail(function(jqXHR, error, errorThrown){
+		var errorElem = showError(error);
+		$('.results').append(errorElem);
+	});
+};
+>>>>>>> bc15071554bdff8ef57b6b736ec6dfa31b68eca1
