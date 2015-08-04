@@ -27,7 +27,7 @@ var getSimilar = function(artist) {
 		console.log(data);
 		var resultCount = data.Similar.Results;
 		console.log("resultcount: " + resultCount);
-		$('.search-results').append("<h2>Results:</h2>");
+		$('.search-results').append("<h2>Artists similar to "+ artist + ":</h2>");
 		$.each(resultCount, function(i, item) {
 			console.log('ran each');
 			var artistEntry = showArtist(item);
@@ -63,7 +63,7 @@ var showArtist = function(artistEntry){
 					artistTitle.attr('id', artistName);
 					//.description - tastekid similar.results.wTeaser
 					var description = result.find('.description');
-					description.prepend((artistEntry.wTeaser).slice(0,150));
+					description.prepend((artistEntry.wTeaser).slice(0,250));
 					//.read-more - tastekid similar.results.wUrl
 					var readMore = result.find('.read-more');
 					readMore.attr('href', artistEntry.wUrl);		
