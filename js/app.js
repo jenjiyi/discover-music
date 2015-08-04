@@ -2,6 +2,7 @@ $(document).ready( function() {
 	$('.artist-finder').submit( function(event){
 		// zero out results if previous search has run
 		$('.search-results').html('');
+		artistArray = [];
 		// get the value of the artist the user submitted
 		var artist = $(this).find("input[name='artist-input']").val();
 		getSimilar(artist);
@@ -15,14 +16,22 @@ var artistArray = [];
 var getSimilar = function(artist) {
 	// the parameters we need to pass in our request to Tastekids's API
 	var request = {
+		q: "music",
 		k: "148673-Discover-OA4KJP1O",
 		info: 1,
+		type: "music",
 		limit: 4,
 		callback: "getArtists"
 				};
-	var result = $.getJSON("http://www.tastekid.com/api/similar?q=music:" + artist + "&k=148673-Discover-OA4KJP1O&limit=4&info=1&callback=?", getArtists).jqXHR.fail(showError());
+	var result = $.getJSON("http://www.tastekid.com/api/similar?q=music:" + artist + "&k=148673-Discover-OA4KJP1O&limit=4&info=1&type=music&callback=?", getArtists)
+	//error
+	.fail(function(jqXHR, error, errorThrown){
+		var errorElem = showError(error);
+		$('.search-results').append(errorElem);
+		});
 	//callback
 	function getArtists(data){
+		$('.search-results').html('');
 		console.log(data);
 		var resultCount = data.Similar.Results;
 		console.log("resultcount: " + resultCount);
@@ -34,18 +43,13 @@ var getSimilar = function(artist) {
 			artistArray.push(data.Similar.Results[i].Name);
 
 		});
+
 	getDiscogs(artistArray);	
 	};
 
 	//error
-	/*.fail(function(jqXHR, error, errorThrown){
-		var errorElem = showError(error);
-		$('.search-results').append(errorElem);
-	});*/
+	
 };
-
-
-
 // takes error string and turns it into displayable DOM element
 var showError = function(error){
 	var errorElem = $('.templates .error').clone();
@@ -80,20 +84,25 @@ var getDiscogs = function(artistArray) {
 			console.log('ran each ' + artistCurrent);
 			console.log(i);
 			arrayNames(artistCurrent, i);
-			//$('.search-results').append(getDisogsResults);
 			});
 	};
 //passes current artist to discogs
 var arrayNames = function(artistCurrent, i){
 				console.log(artistCurrent);
 			// the parameters we need to pass in our request to discogs's API
-				var parameters = {
+				/*var parameters = {
 				key: "PYsVsPzgdtpWJRHhoWdZ",
 				secret: "IgnpUVAmXGwXKePEVmgofIHItlgzqika",
 				callback: "getCatalog"
-				};
+				};*/
 			//ex: https://api.discogs.com/database/search?q=Ian Curtis&key=PYsVsPzgdtpWJRHhoWdZ&secret=IgnpUVAmXGwXKePEVmgofIHItlgzqika 
-			var discogResult = $.getJSON("https://api.discogs.com/database/search?q=" + artistCurrent + "&key=PYsVsPzgdtpWJRHhoWdZ&secret=IgnpUVAmXGwXKePEVmgofIHItlgzqika", getCatalog);
+			var discogResult = $.getJSON("https://api.discogs.com/database/search?q=" + artistCurrent + "&key=PYsVsPzgdtpWJRHhoWdZ&secret=IgnpUVAmXGwXKePEVmgofIHItlgzqika", getCatalog)
+			//error
+			.fail(function(jqXHR, error, errorThrown){
+					 //add broken thumbnail image to dom
+				$('.thumbnail').eq(i).attr('src', 'img/error-img.png');
+				$('.discogs-link').eq(i).attr('class', "");
+				});
 			//callback add discogs to dom elements
 			function getCatalog(data){
 				//store first section of discogs results
@@ -104,7 +113,6 @@ var arrayNames = function(artistCurrent, i){
 				//adds thumbnail image to dom
 				$('.thumbnail').eq(i).attr('src', discogsData.thumb);
 				//add discogs url
-				$('.discogs-link').eq(i).attr('href', "http://www.discogs.com" + discogsData.uri);
+				$('.discogs-link').eq(i).attr('href', "http://www.discogs.com" + discogsData.uri).append("View catalog &raquo;");
 				}; 
 			};
-
