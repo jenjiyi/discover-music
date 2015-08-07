@@ -6,6 +6,7 @@ $(document).ready( function() {
 		// get the value of the artist the user submitted
 		var artist = $(this).find("input[name='artist-input']").val();
 		getSimilar(artist);
+
 	});
 });
 //var for returned artist names in array
@@ -79,40 +80,36 @@ var showArtist = function(artistEntry){
 var getDiscogs = function(artistArray) {
 		console.log(artistArray);
 		$.each(artistArray, function(i, item) {
-			console.log(artistArray+"2");
+			console.log(artistArray+" 2");
 			var artistCurrent = item;
 			console.log('ran each ' + artistCurrent);
-			console.log(i);
+			console.log("index: " + i);
 			arrayNames(artistCurrent, i);
 			});
 	};
 //passes current artist to discogs
 var arrayNames = function(artistCurrent, i){
-				console.log(artistCurrent);
-			// the parameters we need to pass in our request to discogs's API
-				/*var parameters = {
-				key: "PYsVsPzgdtpWJRHhoWdZ",
-				secret: "IgnpUVAmXGwXKePEVmgofIHItlgzqika",
-				callback: "getCatalog"
-				};*/
+				var currentIndex = i;
+				console.log(artistCurrent + "current index to check: " + currentIndex);
 			//ex: https://api.discogs.com/database/search?q=Ian Curtis&key=PYsVsPzgdtpWJRHhoWdZ&secret=IgnpUVAmXGwXKePEVmgofIHItlgzqika 
 			var discogResult = $.getJSON("https://api.discogs.com/database/search?q=" + artistCurrent + "&key=PYsVsPzgdtpWJRHhoWdZ&secret=IgnpUVAmXGwXKePEVmgofIHItlgzqika", getCatalog)
 			//error
 			.fail(function(jqXHR, error, errorThrown){
-					 //add broken thumbnail image to dom
-				$('.thumbnail').eq(i).attr('src', 'img/error-img.png');
-				$('.discogs-link').eq(i).attr('class', "");
-				});
+				$('.thumbnail').eq(currentIndex).attr('src', 'img/error-img.png');	
+				$('.discogs-link').eq(currentIndex).hide();
+				$('.errorDiscogs').eq(currentIndex).html("<p>Uh-oh! Wasn't able to retrieve discogs catalog at this time </p>");
+			}); 
 			//callback add discogs to dom elements
 			function getCatalog(data){
 				//store first section of discogs results
 				var discogsData = data.results[0];
 				console.log(discogsData);
-				console.log("index number: " + i);
-				console.log(artistCurrent + " call back ran  1. discogs url: " + discogsData.uri + "; 2. img src: " +discogsData.thumb);	
-				//adds thumbnail image to dom
-				$('.thumbnail').eq(i).attr('src', discogsData.thumb);
+				console.log("index number: " + currentIndex);
+				console.log(artistCurrent + " call back ran  1. discogs url: " + discogsData.uri + "; 2. img src: " +discogsData.thumb);
+					//adds thumbnail image to dom
+				$('.thumbnail').eq(currentIndex).attr('src', discogsData.thumb);
+				
 				//add discogs url
-				$('.discogs-link').eq(i).attr('href', "http://www.discogs.com" + discogsData.uri).append("View catalog &raquo;");
+				$('.discogs-link').eq(currentIndex).attr('href', "http://www.discogs.com" + discogsData.uri).append("View catalog &raquo;");	
 				}; 
 			};
